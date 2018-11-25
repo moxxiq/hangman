@@ -71,8 +71,13 @@ def get_guessed_word(secret_word, letters_guessed):
     returns: string, comprised of letters, underscores (_), and spaces that represents
       which letters in secret_word have been guessed so far.
     '''
-    # FILL IN YOUR CODE HERE AND DELETE "pass"
-    pass
+    guessed_word = ''
+    for char in secret_word:
+        if char in letters_guessed:
+            guessed_word += char
+        else:
+            guessed_word += '_ '
+    return guessed_word
 
 
 
@@ -204,7 +209,6 @@ if __name__ == "__main__":
     hangman(secret_word)
 
 ###############
-    
     # To test part 3 re-comment out the above lines and 
     # uncomment the following two lines. 
     
