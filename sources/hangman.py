@@ -11,7 +11,8 @@
 # (so be sure to read the docstrings!)
 import random
 import string
-
+import os
+import platform
 
 WORDLIST_FILENAME = "words.txt"
 
@@ -95,6 +96,31 @@ def get_available_letters(letters_guessed):
             available_letters += letter
     return available_letters
 
+def print_ascii_hangman(guesses_remaining):
+    print(" _________     ")
+    print("|         |    ")
+    if guesses_remaining < 6:
+        print("|         0    ")
+        if guesses_remaining == 4:
+            print("|         |    ")
+            print("|              ")
+        elif guesses_remaining == 3:
+            print("|        /|    ")
+            print("|              ")
+        elif guesses_remaining == 2:
+            print("|        /|\\   ")
+            print("|              ")
+        elif guesses_remaining == 1:
+            print("|        /|\\   ")
+            print("|        /     ")
+        elif guesses_remaining < 2:
+            print("|        /|\\   ")
+            print("|        / \\   ")
+        else:
+            print("|              \n" * 2, end='')
+    else:
+        print("|              \n"*3, end='')
+    print("|              \n" * 2)
 
 
 def hangman(secret_word):
@@ -135,8 +161,11 @@ def hangman(secret_word):
 
     while not is_word_guessed(secret_word,letters_guessed) and guesses_remaining > 0:
         print(f"You have {guesses_remaining} guesses left.")
+        print_ascii_hangman(guesses_remaining)
         print("Available letters:", get_available_letters(letters_guessed))
-        letter = input("Please guess a letter: ")[0]
+        letter = input("Please guess a letter: ")
+        if letter:
+            letter = letter[0]
         if letter.isalpha():
             letter.lower()
             if letter in letters_guessed:
@@ -170,7 +199,15 @@ def hangman(secret_word):
 
     if guesses_remaining < 1:
         print(f"Sorry, you ran out of guesses. The word was '{secret_word}'")
-        # TODO: colorful font on diffedent OS
+        if platform.system() == 'Linux':
+            print('\x1b[0;31;40m\n\n' + '                     YOU DIED\n')
+            print_ascii_hangman(0)
+            print('\x1b[0m')
+        elif platform.system() == 'Windows':
+            os.system("color 0c")
+            print('\n\n' + '                     YOU DIED\n')
+            print_ascii_hangman(0)
+            os.system("color 07")
         return
     print("Good guess:", get_guessed_word(secret_word,letters_guessed))
     print('------------------------------------------------')
