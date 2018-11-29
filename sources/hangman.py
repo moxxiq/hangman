@@ -13,6 +13,7 @@ import random
 import string
 import os
 import platform
+import re
 
 WORDLIST_FILENAME = "words.txt"
 
@@ -33,6 +34,12 @@ def load_words():
     wordlist = line.split()
     print("  ", len(wordlist), "words loaded.")
     return wordlist
+
+
+def load_file():
+    inFile = open(WORDLIST_FILENAME, 'r')
+    text = inFile.read()
+    return text
 
 
 def choose_word(wordlist):
@@ -255,8 +262,10 @@ def show_possible_matches(my_word):
              that has already been revealed.
 
     '''
-    # FILL IN YOUR CODE HERE AND DELETE "pass"
-    pass
+    wordlist = re.findall(' ' + my_word.replace("_ ", ".")+ ' ', ' ' + load_file() + ' ')
+    for word in wordlist:
+        print(word.replace(" ", ""),end=' ')
+    print()
 
 
 def hangman_with_hints(secret_word):
@@ -302,7 +311,9 @@ if __name__ == "__main__":
     # uncomment the following two lines.
 
     secret_word = choose_word(wordlist)
-    hangman(secret_word)
+    print(secret_word)
+    show_possible_matches(input())
+    # hangman(secret_word)
 
 
 ###############
